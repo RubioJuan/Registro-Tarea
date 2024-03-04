@@ -4,10 +4,10 @@ export class RegContacto extends HTMLElement{
        this.render();
        this.saveData();
        this.enabledBtns();
-       this.disableFrm();
+       this.disableFrm(true);
    }
    render(){
-       this.innerHTML = /* html*/`
+       this.innerHTML = /* html*/ `
        <style rel="stylesheet">
          @import "./app/Components/contacto/contactoStyle.css";
        </style>
@@ -52,12 +52,11 @@ export class RegContacto extends HTMLElement{
                       <div class="row mt-3">
                         <div class="col">
                           <div class="container mt-4 text-center">
-                            <a href="#" class="btn btn-primary" id="btnNuevo" data-ed='[["#btnGuardar","#btnCancelar"],["#btnNuevo","#btnEditar","#btnEliminar"'>Nueva Tarea</a>
-                            <a href="#" class="btn btn-secondary disable" id="btnCancelar" data-ed='[["#btnNuevo"],["#btnGuardar","#btnEditar","#btnEliminar","btnCancelar"]]'>Cancelar Tarea</a>
-                            <a href="#" class="btn btn-success disable" id="btnGuardar" data-ed='[["#btnEditar","#btnCancelar","#btnNuevo","#btnEliminar"],["#btnGuardar"]'>Guardar Tarea</a>
-                            <ul id="task"></ul>
-                            <a href="#" class="btn btn-info disable" id="btnEditar" data-ed='[[],[]]'>Editar Tarea</a>
-                            <a href="#" class="btn btn-danger disable" id="btnEliminar" data-ed='[["#btnNuevo"],["#btnGuardar","btnEditar","#btnEliminar","#btnCancelar"]]'>Eliminar Tarea</a>
+                            <a href="#" class="btn btn-primary"  id="btnNuevo" data-ed='[["#btnGuardar","#btnCancelar"],["#btnNuevo","#btnEditar","#btnEliminar"]]'>Nueva Tarea</a>
+                            <a href="#" class="btn btn-dark " id="btnCancelar" data-ed='[["#btnNuevo"],["#btnGuardar","#btnEditar","#btnEliminar","#btnCancelar"]]'>Cancelar Tarea</a>
+                            <a href="#" class="btn btn-success" id="btnGuardar" data-ed='[["#btnEditar","#btnCancelar","#btnNuevo","#btnEliminar"],["#btnGuardar"]]'>Guardar Tarea</a>
+                            <a href="#" class="btn btn-warning" id="btnEditar" data-ed='[[],[]]'>Editar</a>
+                            <a href="#" class="btn btn-danger" id="btnEliminar" data-ed='[["#btnNuevo"],["#btnGuardar","#btnEditar","#btnEliminar","#btnCancelar"]]'>Eliminar Tarea</a>
                           </div>
                         </div>
                     </div>  
@@ -67,22 +66,27 @@ export class RegContacto extends HTMLElement{
       `;
       this.querySelector("#btnNuevo").addEventListener("click",(e) =>{
         this.ctrlBtn(e.target.dataset.ed);
+        this.disableFrm(false);
+      })
+      this.querySelector("#btnCancelar").addEventListener("click",(e) =>{
+        this.ctrlBtn(e.target.dataset.ed);
+        this.disableFrm(true);
       })
   }
 ctrlBtn = (e) =>{
     let data = JSON.parse(e);
     data[0].forEach(boton => {
-      let btnActual = document.querySelector(boton);
-      btnActual.classList.remove('disabled');
+        let btnActual = document.querySelector(boton);
+        btnActual.classList.remove('disabled');
     });
     data[1].forEach(boton => {
-      let btnActual = document.querySelector(boton);
-      btnActual.classList.add('disabled');
+        let btnActual = document.querySelector(boton);
+        btnActual.classList.add('disabled');
     });
 }
 enabledBtns =() =>{
   document.querySelectorAll(".btn").forEach((val, id) => {
-    this.ctrlBtn(val.dataset.ed);
+      this.ctrlBtn(val.dataset.ed);
   })
 }
 saveData = () =>{
@@ -95,7 +99,7 @@ saveData = () =>{
         e.preventDefault();
       })
     }
-disableFrm = () =>{
+disableFrm = (estado) =>{
   let frm={
     nombreContacto: '',
     fechaInicio: '',
@@ -108,10 +112,9 @@ disableFrm = () =>{
     Object.entries(frm).forEach(([key, value]) => myFrm.append(key, value));
     myFrm.forEach((value, key) =>{
       frmRegistro.elements[key].value= value;
-      frmRegistro.elements[key].disabled = true;
+      frmRegistro.elements[key].disabled = estado;
     })
 
-}
-
+  }
 }
   customElements.define("reg-contacto",RegContacto);

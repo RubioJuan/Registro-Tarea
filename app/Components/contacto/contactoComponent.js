@@ -1,6 +1,5 @@
 import '/app/Components/contacto/regContacto.js';
 import '/app/Components/contacto/lstContacto.js';
-import '/app/Components/contacto/detContacto.js';
 export class contactoComponent extends HTMLElement{
    constructor(){
        super();
@@ -28,16 +27,13 @@ export class contactoComponent extends HTMLElement{
         <div class="container" id="lstContacto" style="display:none;">
             <lst-contacto></lst-contacto>
         </div>
-        <div class="container" id="detContacto" style="display:none;">
-            <det-contacto></det-contacto>
-        </div>
         `;
         this.querySelectorAll(".mnucontacto").forEach((val, id) =>{
             val.addEventListener("click", (e)=>{
                 let data = JSON.parse(e.target.dataset.verocultar);
                 let cardVer = document.querySelector(data[0]);
                 cardVer.style.display = 'block';
-                data[1].forEach(card =>{
+                data[1].forEach(card => {
                     let cardActual = document.querySelector(card);
                     cardActual.style.display = 'none';
                 });
